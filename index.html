@@ -281,7 +281,11 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 // Re-check every 10 seconds (or whatever interval you want)
-console.log('Stored:', localStorage.getItem('siteVersion'), '| Remote:', ver, '| Pending:', getPendingUpdate());
+fetch(VERSION_URL, { cache: 'no-store' })
+  .then(res => res.text())
+  .then(remoteVer => {
+    console.log('Stored:', localStorage.getItem('siteVersion'), '| Remote:', remoteVer.trim(), '| Pending:', getPendingUpdate());
+  });
 setInterval(checkVersion, 10000);
 
 </script>
