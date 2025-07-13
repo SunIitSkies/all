@@ -38,11 +38,41 @@ fetch('filelist.json')
         const btn = document.createElement('button');
         btn.textContent = 'Copy Link';
         btn.style.marginLeft = '10px';
-        btn.onclick = () => {
-          navigator.clipboard.writeText(window.location.origin + '/' + file.path)
-            .then(() => alert('Copied to clipboard!'))
-            .catch(() => alert('Failed to copy!'));
-        };
+		btn.onclick = () => {
+  navigator.clipboard.writeText(window.location.origin + '/' + file.path)
+    .then(() => {
+      // Create or reuse a span for feedback
+      let feedback = btn.nextSibling;
+      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
+        feedback = document.createElement('span');
+        feedback.classList.add('copy-feedback');
+        feedback.style.marginLeft = '10px';
+        feedback.style.color = 'green';
+        btn.parentNode.insertBefore(feedback, btn.nextSibling);
+      }
+      feedback.textContent = 'Copied!';
+      // Remove the feedback text after 2 seconds
+      setTimeout(() => {
+        feedback.textContent = '';
+      }, 2000);
+    })
+    .catch(() => {
+      // Similar feedback for failure
+      let feedback = btn.nextSibling;
+      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
+        feedback = document.createElement('span');
+        feedback.classList.add('copy-feedback');
+        feedback.style.marginLeft = '10px';
+        feedback.style.color = 'red';
+        btn.parentNode.insertBefore(feedback, btn.nextSibling);
+      }
+      feedback.textContent = 'Failed to copy!';
+      setTimeout(() => {
+        feedback.textContent = '';
+      }, 2000);
+    });
+		};
+		
         li.appendChild(btn);
 
         ul.appendChild(li);
