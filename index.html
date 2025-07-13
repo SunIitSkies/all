@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>My Objection.lol CDN</title>
-</head>
-<body>
-  <h1>Objection.lol Assets</h1>
-  <ul id="fileList"></ul>
+<ul id="fileList"></ul>
 
-  <script>
-    fetch('filelist.json')
-      .then(response => response.json())
-      .then(files => {
-        const ul = document.getElementById('fileList');
-        files.forEach(file => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-		  a.href = file.path;
-          a.textContent = file.name;
-          li.appendChild(a);
-          ul.appendChild(li);
-        });
-      })
-      .catch(e => console.error('Failed to load filelist.json', e));
-  </script>
-</body>
-</html>
+<script>
+fetch('filelist.json')
+  .then(response => response.json())
+  .then(files => {
+    // Group files by folder (path before last slash)
+    const groups = {};
+    files.forEach(file => {
+      // Extract folder path (remove filename)
+      const folder = file.path.substring(0, file.path.lastIndexOf('/')) || 'root';
+      if (!groups[folder]) groups[folder] = [];
+      groups[folder].push(file);
+    });
+
+    // Sort groups by folder name
+    const sortedFolders = Object.keys(groups).sort();
+
+    const ul = document.getElementById('fileList');
+
+    sortedFolders.forEach(folder => {
+      // Add header for folder
+      const header = document.createElement('h2');
+      header.textContent = folder;
+      ul.appendChild(header);
+
+      // Sort files alphabetically by name in the group
+      groups[folder].sort((a, b) => a.name.localeCompare(b.name));
+
+      groups[folder].forEach(file => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '/' + file.path;
+        a.textContent = file.name;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+    });
+  })
+  .catch(e => console.error('Failed to load filelist.json', e));
+</script>
