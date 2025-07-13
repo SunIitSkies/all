@@ -3,6 +3,9 @@
 <head>
   <title>Objection.lol Assets</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <style>
   body {
     background-image: url('objection.lol/evidence/cirno%20fumo%20in%20a%20field.png');
@@ -36,9 +39,6 @@
 </style>
 </head>
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 
 <style>
 a { color: white !important; text-decoration: underline; }
@@ -199,6 +199,11 @@ fetch('filelist.json')
 </script>
 
 <script>
+// Optionally clear localStorage on first ever use of site (good for dev/tests)
+if (!localStorage.getItem('siteVersion')) {
+  localStorage.setItem('siteVersion', '');
+  clearPendingUpdate();
+}
 const VERSION_URL = '/version.txt';
 
 // --- Helper: Get and Set pending update flag ---
@@ -245,26 +250,28 @@ function checkVersion() {
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
-      // ...rest of your logic...
-
+      console.log(
+        'Running checkVersion...',
+        '| Stored:', localStorage.getItem('siteVersion'),
+        '| Remote:', ver,
+        '| Pending:', getPendingUpdate()
+      );
+      // --- rest of your code below ---
       const storedVersion = localStorage.getItem('siteVersion');
-      // On first load, store version
       if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
         clearPendingUpdate();
         hideUpdateBanner();
         return;
       }
-      // Version changed!
       if (ver !== storedVersion) {
         setPendingUpdate(ver);
         showUpdateBanner();
       }
-      // If pendingUpdate is set, and we now match, clear everything
       const pending = getPendingUpdate();
       if (pending && pending === ver) {
         clearPendingUpdate();
-        localStorage.setItem('siteVersion', ver); // update for next comparison
+        localStorage.setItem('siteVersion', ver);
         hideUpdateBanner();
       }
     });
@@ -277,8 +284,12 @@ window.addEventListener('DOMContentLoaded', function() {
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
+      console.log(
+        '[DOMContentLoaded] Initial | Remote:', ver,
+        '| Stored:', localStorage.getItem('siteVersion'),
+        '| Pending:', getPendingUpdate()
+      );
       // ...rest of your logic...
-
       const storedVersion = localStorage.getItem('siteVersion');
       if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
@@ -290,12 +301,8 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 // Re-check every 10 seconds (or whatever interval you want)
-fetch(VERSION_URL, { cache: 'no-store' })
-  .then(res => res.text())
-  .then(remoteVer => {
-    console.log('Stored:', localStorage.getItem('siteVersion'), '| Remote:', remoteVer.trim(), '| Pending:', getPendingUpdate());
-  });
 setInterval(checkVersion, 10000);
 
 </script>
