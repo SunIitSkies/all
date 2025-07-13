@@ -151,9 +151,9 @@ fetch('filelist.json')
 </style>
 
 <button id="musicToggle">Music</button>
-<input type="number" id="volumeInput" min="0" max="100" value="50" />
+<input type="number" id="volumeInput" min="0" max="100" value="20" />
 
-<audio id="bgMusic" loop volume="0.5">
+<audio id="bgMusic" loop volume="0.2">
   <source src="objection.lol/sounds/Courtroom%20Lobby%20AJ;AA%20(extended).mp3" type="audio/mpeg" />
   Your browser does not support the audio element.
 </audio>
@@ -177,7 +177,7 @@ fetch('filelist.json')
 
   volumeInput.addEventListener('input', () => {
     let val = parseInt(volumeInput.value, 10);
-    if (isNaN(val)) val = 50;
+    if (isNaN(val)) val = 20;
     if (val < 0) val = 0;
     if (val > 100) val = 100;
     bgMusic.volume = val / 100;
