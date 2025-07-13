@@ -36,6 +36,10 @@
 </style>
 </head>
 
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <style>
 a { color: white !important; text-decoration: underline; }
 a:visited { color: cyan !important; }
@@ -236,10 +240,13 @@ function hideUpdateBanner() {
 
 // --- Main check logic ---
 function checkVersion() {
-  fetch(VERSION_URL, { cache: 'no-store' })
+  const bust = Date.now();
+  fetch(VERSION_URL + '?v=' + bust, { cache: 'no-store' })
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
+      // ...rest of your logic...
+
       const storedVersion = localStorage.getItem('siteVersion');
       // On first load, store version
       if (!storedVersion) {
@@ -265,10 +272,13 @@ function checkVersion() {
 
 // On page load, if a pending update was already set, keep showing banner
 window.addEventListener('DOMContentLoaded', function() {
-  fetch(VERSION_URL, { cache: 'no-store' })
+  const bust = Date.now();
+  fetch(VERSION_URL + '?v=' + bust, { cache: 'no-store' })
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
+      // ...rest of your logic...
+
       const storedVersion = localStorage.getItem('siteVersion');
       if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
