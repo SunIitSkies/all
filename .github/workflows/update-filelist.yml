@@ -18,9 +18,11 @@ jobs:
             echo "{\"name\": \"$fname\", \"path\": \"$file\"}"
           done | jq -s '.' > filelist.json
 
-      - name: Commit and push filelist.json
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Auto update filelist.json"
-          file_pattern: filelist.json
-          github_token: ${{ secrets.GH_TOKEN }}
+        - name: Commit and push filelist.json
+          uses: stefanzweifel/git-auto-commit-action@v4
+          env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          with:
+            commit_message: "Auto update filelist.json"
+            file_pattern: filelist.json
+
