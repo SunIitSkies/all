@@ -20,8 +20,7 @@ jobs:
 
       - name: Commit and push filelist.json    # <-- NOT INDENTED UNDER RUN
         uses: stefanzweifel/git-auto-commit-action@v4
-        env:
-          PERSONAL_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           commit_message: "Auto update filelist.json"
           file_pattern: filelist.json
+          token: ${{ secrets.GH_TOKEN }}
