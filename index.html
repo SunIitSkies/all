@@ -191,36 +191,84 @@ fetch('filelist.json')
 const VERSION_URL = '/version.txt';
 let currentVersion = null;
 
+// --- Helper: Get and Set pending update flag ---
+function setPendingUpdate(ver) {
+  localStorage.setItem('pendingUpdate', ver);
+}
+function getPendingUpdate() {
+  return localStorage.getItem('pendingUpdate');
+}
+function clearPendingUpdate() {
+  localStorage.removeItem('pendingUpdate');
+}
+
+function showUpdateBanner() {
+  if (!document.getElementById('updateBanner')) {
+    const banner = document.createElement('div');
+    banner.id = 'updateBanner';
+    banner.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;
+      background:#1db954;color:#fff;
+      text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
+    banner.textContent = "The website has been updated, please refresh.";
+    // Add hard refresh button
+    const btn = document.createElement('button');
+    btn.textContent = 'Hard Refresh';
+    btn.style.cssText = 'margin-left:2em;padding:0.5em 1em;';
+    btn.onclick = function() {
+      // Bust cache
+      window.location.href = window.location.pathname + '?refresh=' + Date.now();
+    };
+    banner.appendChild(btn);
+    document.body.appendChild(banner);
+  }
+}
+function hideUpdateBanner() {
+  const b = document.getElementById('updateBanner');
+  if (b) b.remove();
+}
+
+// --- Main check logic ---
 function checkVersion() {
   fetch(VERSION_URL, { cache: 'no-store' })
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
+      // On first load, set version and clear pendingUpdate
       if (currentVersion === null) {
-        // First load, store version
         currentVersion = ver;
         localStorage.setItem('siteVersion', ver);
+        clearPendingUpdate();
+        hideUpdateBanner();
       } else if (ver !== currentVersion) {
-        if (!document.getElementById('updateBanner')) {
-          const banner = document.createElement('div');
-          banner.id = 'updateBanner';
-          banner.style.cssText = "position:fixed;top:0;left:0;width:100%;background:#1db954;color:#fff;text-align:center;padding:1em;font-size:1.2em;z-index:9999;";
-          banner.textContent = "The website has been updated, please refresh.";
-          document.body.appendChild(banner);
-        }
+        // New version detected!
+        setPendingUpdate(ver);
+        showUpdateBanner();
+      }
+      // If pendingUpdate is set, and we now match, clear everything
+      const pending = getPendingUpdate();
+      if (pending && pending === ver) {
+        clearPendingUpdate();
+        hideUpdateBanner();
       }
     });
 }
 
-// On first load
-fetch(VERSION_URL, { cache: 'no-store' })
-  .then(res => res.text())
-  .then(ver => {
-    currentVersion = ver.trim();
-    localStorage.setItem('siteVersion', currentVersion);
-  });
+// On page load, if a pending update was already set, keep showing banner
+window.addEventListener('DOMContentLoaded', function() {
+  fetch(VERSION_URL, { cache: 'no-store' })
+    .then(res => res.text())
+    .then(ver => {
+      ver = ver.trim();
+      currentVersion = ver;
+      localStorage.setItem('siteVersion', ver);
+      const pending = getPendingUpdate();
+      if (pending && pending !== ver) showUpdateBanner();
+    });
+});
 
-setInterval(checkVersion, 10000); // check every 10 seconds
+// Re-check every 10 seconds (or whatever interval you want)
+setInterval(checkVersion, 10000);
 </script>
 
 </body>
