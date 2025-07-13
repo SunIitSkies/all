@@ -123,5 +123,45 @@ fetch('filelist.json')
   })
   .catch(e => console.error('Failed to load filelist.json', e));
 </script>
+
+<style>
+  #musicToggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+</style>
+
+<button id="musicToggle">Music</button>
+<audio id="bgMusic" loop>
+  <source src="objection.lol/sounds/Courtroom%20Lobby%20AJ;AA%20(extended).mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  const musicToggle = document.getElementById('musicToggle');
+  const bgMusic = document.getElementById('bgMusic');
+  let playing = false;
+
+  musicToggle.addEventListener('click', () => {
+    if (playing) {
+      bgMusic.pause();
+      musicToggle.style.backgroundColor = 'rgba(0,0,0,0.6)';
+    } else {
+      bgMusic.play();
+      musicToggle.style.backgroundColor = 'rgba(0,128,0,0.8)';
+    }
+    playing = !playing;
+  });
+</script>
+
 </body>
 </html>
