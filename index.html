@@ -202,6 +202,7 @@ fetch('filelist.json')
 // Optionally clear localStorage on first ever use of site (good for dev/tests)
 if (!localStorage.getItem('siteVersion')) {
   localStorage.setItem('siteVersion', '');
+  console.log('[INIT] siteVersion set to empty');
   clearPendingUpdate();
 }
 const VERSION_URL = '/version.txt';
@@ -209,15 +210,18 @@ const VERSION_URL = '/version.txt';
 // --- Helper: Get and Set pending update flag ---
 function setPendingUpdate(ver) {
   localStorage.setItem('pendingUpdate', ver);
+  console.log('[CALL] setPendingUpdate with:', ver);
 }
 function getPendingUpdate() {
   return localStorage.getItem('pendingUpdate');
 }
 function clearPendingUpdate() {
   localStorage.removeItem('pendingUpdate');
+  console.log('[CALL] clearPendingUpdate');
 }
 
 function showUpdateBanner() {
+  console.log('[CALL] showUpdateBanner was called!');
   if (!document.getElementById('updateBanner')) {
     const banner = document.createElement('div');
     banner.id = 'updateBanner';
@@ -260,6 +264,7 @@ function checkVersion() {
       const storedVersion = localStorage.getItem('siteVersion');
       if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
+        console.log('[SET] siteVersion updated to:', ver, '(First set)');
         clearPendingUpdate();
         hideUpdateBanner();
         return;
@@ -272,6 +277,7 @@ function checkVersion() {
       if (pending && pending === ver) {
         clearPendingUpdate();
         localStorage.setItem('siteVersion', ver);
+        console.log('[SET] siteVersion updated to:', ver, '(On match)');
         hideUpdateBanner();
       }
     });
@@ -293,6 +299,7 @@ window.addEventListener('DOMContentLoaded', function() {
       const storedVersion = localStorage.getItem('siteVersion');
       if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
+        console.log('[SET] siteVersion updated to:', ver, '(DOMContentLoaded)');
         clearPendingUpdate();
         hideUpdateBanner();
       }
@@ -301,11 +308,10 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-// Re-check every 10 seconds (or whatever interval you want)
+// --- RUN PERIODIC CHECK ---
 setInterval(checkVersion, 10000);
-
 </script>
+
 
 </body>
 </html>
