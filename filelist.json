@@ -1,5 +1,150 @@
 [
-  { "name": "Blocked.png", "path": "objection.lol/evidence/Blocked.png" },
-  { "name": "epic duck normal.png", "path": "objection.lol/characters/epic duck/epic duck normal.png" },
-  { "name": "Ace Attorney Search Opening 2001.mp3", "path": "objection.lol/sounds/Ace Attorney Search Opening 2001.mp3" }
+  {
+    "name": "cat dance.gif",
+    "path": "objection.lol/extra/cat dance.gif"
+  },
+  {
+    "name": "link rawifier",
+    "path": "objection.lol/link rawifier"
+  },
+  {
+    "name": "Courtroom Lobby AJ;AA (extended).mp3",
+    "path": "objection.lol/sounds/Courtroom Lobby AJ;AA (extended).mp3"
+  },
+  {
+    "name": "Ace Attorney Search Opening 2001.mp3",
+    "path": "objection.lol/sounds/Ace Attorney Search Opening 2001.mp3"
+  },
+  {
+    "name": "nash icon.png",
+    "path": "objection.lol/characters/nashatra bealdhild/nash icon.png"
+  },
+  {
+    "name": "nash normal.png",
+    "path": "objection.lol/characters/nashatra bealdhild/nash normal.png"
+  },
+  {
+    "name": "nash talk.gif",
+    "path": "objection.lol/characters/nashatra bealdhild/nash talk.gif"
+  },
+  {
+    "name": "7 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/7 sho talk.gif"
+  },
+  {
+    "name": "1 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/1 sho talk.gif"
+  },
+  {
+    "name": "8 sho shouting.png",
+    "path": "objection.lol/characters/sho minamimoto/8 sho shouting.png"
+  },
+  {
+    "name": "8 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/8 sho talk.gif"
+  },
+  {
+    "name": "4 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/4 sho talk.gif"
+  },
+  {
+    "name": "2 sho mysterious.png",
+    "path": "objection.lol/characters/sho minamimoto/2 sho mysterious.png"
+  },
+  {
+    "name": "9 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/9 sho talk.gif"
+  },
+  {
+    "name": "2 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/2 sho talk.gif"
+  },
+  {
+    "name": "9 sho angry.png",
+    "path": "objection.lol/characters/sho minamimoto/9 sho angry.png"
+  },
+  {
+    "name": "6 sho hurt.png",
+    "path": "objection.lol/characters/sho minamimoto/6 sho hurt.png"
+  },
+  {
+    "name": "1 sho normal icon.png",
+    "path": "objection.lol/characters/sho minamimoto/1 sho normal icon.png"
+  },
+  {
+    "name": "1 sho normal.png",
+    "path": "objection.lol/characters/sho minamimoto/1 sho normal.png"
+  },
+  {
+    "name": "6 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/6 sho talk.gif"
+  },
+  {
+    "name": "4 sho calculating.png",
+    "path": "objection.lol/characters/sho minamimoto/4 sho calculating.png"
+  },
+  {
+    "name": "5 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/5 sho talk.gif"
+  },
+  {
+    "name": "7 sho happy.png",
+    "path": "objection.lol/characters/sho minamimoto/7 sho happy.png"
+  },
+  {
+    "name": "3 sho talk.gif",
+    "path": "objection.lol/characters/sho minamimoto/3 sho talk.gif"
+  },
+  {
+    "name": "3 sho tough.png",
+    "path": "objection.lol/characters/sho minamimoto/3 sho tough.png"
+  },
+  {
+    "name": "5 sho explaining.png",
+    "path": "objection.lol/characters/sho minamimoto/5 sho explaining.png"
+  },
+  {
+    "name": "epic duck normal.png",
+    "path": "objection.lol/characters/epic duck/epic duck normal.png"
+  },
+  {
+    "name": "epic duck talk.gif",
+    "path": "objection.lol/characters/epic duck/epic duck talk.gif"
+  },
+  {
+    "name": "epic duck talk.png",
+    "path": "objection.lol/characters/epic duck/epic duck talk.png"
+  },
+  {
+    "name": "phoenix-wright-ace-attorney.gif",
+    "path": "objection.lol/evidence/phoenix-wright-ace-attorney.gif"
+  },
+  {
+    "name": "yumihiko-ichiyanagi-ace-attorney-investigations-2.gif",
+    "path": "objection.lol/evidence/yumihiko-ichiyanagi-ace-attorney-investigations-2.gif"
+  },
+  {
+    "name": "woman.png",
+    "path": "objection.lol/evidence/woman.png"
+  },
+  {
+    "name": "cirno fumo in a field.png",
+    "path": "objection.lol/evidence/cirno fumo in a field.png"
+  },
+  {
+    "name": "mad eunoia.png",
+    "path": "objection.lol/evidence/mad eunoia.png"
+  },
+  {
+    "name": "Blocked.png",
+    "path": "objection.lol/evidence/Blocked.png"
+  },
+  {
+    "name": "eunoia.png",
+    "path": "objection.lol/evidence/eunoia.png"
+  },
+  {
+    "name": "sad eunoia.png",
+    "path": "objection.lol/evidence/sad eunoia.png"
+  }
 ]
