@@ -7,7 +7,6 @@ fetch('filelist.json')
     // Group files by folder (path before last slash)
     const groups = {};
     files.forEach(file => {
-      // Extract folder path (remove filename)
       const folder = file.path.substring(0, file.path.lastIndexOf('/')) || 'root';
       if (!groups[folder]) groups[folder] = [];
       groups[folder].push(file);
@@ -29,10 +28,23 @@ fetch('filelist.json')
 
       groups[folder].forEach(file => {
         const li = document.createElement('li');
+
         const a = document.createElement('a');
         a.href = '/' + file.path;
         a.textContent = file.name;
+        a.target = '_blank'; // open in new tab
         li.appendChild(a);
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Copy Link';
+        btn.style.marginLeft = '10px';
+        btn.onclick = () => {
+          navigator.clipboard.writeText(window.location.origin + '/' + file.path)
+            .then(() => alert('Copied to clipboard!'))
+            .catch(() => alert('Failed to copy!'));
+        };
+        li.appendChild(btn);
+
         ul.appendChild(li);
       });
     });
