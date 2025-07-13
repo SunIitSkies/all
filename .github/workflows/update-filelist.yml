@@ -1,0 +1,27 @@
+name: Update filelist.json
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-filelist:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+- name: Generate filelist.json
+  run: |
+    find objection.lol -type f ! -name 'filelist.json' | while read file; do
+      fname=$(basename "$file")
+      echo "{\"name\": \"$fname\", \"path\": \"$file\"}"
+    done | jq -s '.' > filelist.json
+
+    - name: Commit and push filelist.json
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Auto update filelist.json"
+        file_pattern: filelist.json
+
