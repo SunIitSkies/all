@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>My Objection.lol CDN</title>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <h1>Objection.lol Assets</h1>
+  <ul id="fileList"></ul>
+
+  <script>
+    fetch('filelist.json')
+      .then(response => response.json())
+      .then(files => {
+        const ul = document.getElementById('fileList');
+        files.forEach(file => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+		  a.href = file.path;
+          a.textContent = file.name;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+      })
+      .catch(e => console.error('Failed to load filelist.json', e));
+  </script>
 </body>
 </html>
