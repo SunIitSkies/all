@@ -187,5 +187,41 @@ fetch('filelist.json')
   bgMusic.volume = volumeInput.value / 100;
 </script>
 
+<script>
+const VERSION_URL = '/version.txt';
+let currentVersion = null;
+
+function checkVersion() {
+  fetch(VERSION_URL, { cache: 'no-store' })
+    .then(res => res.text())
+    .then(ver => {
+      ver = ver.trim();
+      if (currentVersion === null) {
+        // First load, store version
+        currentVersion = ver;
+        localStorage.setItem('siteVersion', ver);
+      } else if (ver !== currentVersion) {
+        if (!document.getElementById('updateBanner')) {
+          const banner = document.createElement('div');
+          banner.id = 'updateBanner';
+          banner.style.cssText = "position:fixed;top:0;left:0;width:100%;background:#1db954;color:#fff;text-align:center;padding:1em;font-size:1.2em;z-index:9999;";
+          banner.textContent = "The website has been updated, please refresh.";
+          document.body.appendChild(banner);
+        }
+      }
+    });
+}
+
+// On first load
+fetch(VERSION_URL, { cache: 'no-store' })
+  .then(res => res.text())
+  .then(ver => {
+    currentVersion = ver.trim();
+    localStorage.setItem('siteVersion', currentVersion);
+  });
+
+setInterval(checkVersion, 10000); // check every 10 seconds
+</script>
+
 </body>
 </html>

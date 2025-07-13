@@ -23,3 +23,13 @@ jobs:
         with:
           commit_message: "Auto update filelist.json"
           file_pattern: filelist.json
+          
+          
+      - name: Update version.txt
+        run: git rev-parse HEAD > version.txt
+
+      - name: Commit version.txt
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update version.txt"
+          file_pattern: version.txt
