@@ -23,5 +23,4 @@ jobs:
         with:
           commit_message: "Auto update filelist.json"
           file_pattern: filelist.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
