@@ -1,6 +1,28 @@
-<ul id="fileList"></ul>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Objection.lol Assets</title>
+  <style>
+    .content-block {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 30px auto;
+      color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="content-block">
+    <h1>Objection.lol Assets</h1>
+    <ul id="fileList"></ul>
+  </div>
 
-<script>
+  <script>
+    <script>
 fetch('filelist.json')
   .then(response => response.json())
   .then(files => {
@@ -81,3 +103,6 @@ fetch('filelist.json')
   })
   .catch(e => console.error('Failed to load filelist.json', e));
 </script>
+  </script>
+</body>
+</html>
