@@ -18,10 +18,8 @@ jobs:
             echo "{\"name\": \"$fname\", \"path\": \"$file\"}"
           done | jq -s '.' > filelist.json
 
-      - name: Commit and push filelist.json    # <-- NOT INDENTED UNDER RUN
+      - name: Commit and push filelist.json
         uses: stefanzweifel/git-auto-commit-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           commit_message: "Auto update filelist.json"
           file_pattern: filelist.json
