@@ -196,7 +196,6 @@ fetch('filelist.json')
 
 <script>
 const VERSION_URL = '/version.txt';
-let currentVersion = null;
 
 // --- Helper: Get and Set pending update flag ---
 function setPendingUpdate(ver) {
@@ -241,14 +240,16 @@ function checkVersion() {
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
-      // On first load, set version and clear pendingUpdate
-      if (currentVersion === null) {
-        currentVersion = ver;
+      const storedVersion = localStorage.getItem('siteVersion');
+      // On first load, store version
+      if (!storedVersion) {
         localStorage.setItem('siteVersion', ver);
         clearPendingUpdate();
         hideUpdateBanner();
-      } else if (ver !== currentVersion) {
-        // New version detected!
+        return;
+      }
+      // Version changed!
+      if (ver !== storedVersion) {
         setPendingUpdate(ver);
         showUpdateBanner();
       }
@@ -256,6 +257,7 @@ function checkVersion() {
       const pending = getPendingUpdate();
       if (pending && pending === ver) {
         clearPendingUpdate();
+        localStorage.setItem('siteVersion', ver); // update for next comparison
         hideUpdateBanner();
       }
     });
@@ -267,8 +269,12 @@ window.addEventListener('DOMContentLoaded', function() {
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
-      currentVersion = ver;
-      localStorage.setItem('siteVersion', ver);
+      const storedVersion = localStorage.getItem('siteVersion');
+      if (!storedVersion) {
+        localStorage.setItem('siteVersion', ver);
+        clearPendingUpdate();
+        hideUpdateBanner();
+      }
       const pending = getPendingUpdate();
       if (pending && pending !== ver) showUpdateBanner();
     });
@@ -276,6 +282,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 // Re-check every 10 seconds (or whatever interval you want)
 setInterval(checkVersion, 10000);
+
 </script>
 
 </body>
