@@ -138,17 +138,30 @@ fetch('filelist.json')
     border-radius: 4px;
     font-weight: bold;
   }
+  #volumeInput {
+    position: fixed;
+    top: 45px;
+    right: 10px;
+    width: 60px;
+    height: 25px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
 </style>
 
 <button id="musicToggle">Music</button>
-<audio id="bgMusic" loop>
-  <source src="objection.lol/sounds/Courtroom%20Lobby%20AJ;AA%20(extended).mp3" type="audio/mpeg" />
+<input type="number" id="volumeInput" min="0" max="100" value="50" />
+
+<audio id="bgMusic" loop volume="0.5">
+  <source src="objection.lol/sounds/ApolloJusticeTheme.mp3" type="audio/mpeg" />
   Your browser does not support the audio element.
 </audio>
 
 <script>
   const musicToggle = document.getElementById('musicToggle');
   const bgMusic = document.getElementById('bgMusic');
+  const volumeInput = document.getElementById('volumeInput');
   let playing = false;
 
   musicToggle.addEventListener('click', () => {
@@ -161,6 +174,17 @@ fetch('filelist.json')
     }
     playing = !playing;
   });
+
+  volumeInput.addEventListener('input', () => {
+    let val = parseInt(volumeInput.value, 10);
+    if (isNaN(val)) val = 50;
+    if (val < 0) val = 0;
+    if (val > 100) val = 100;
+    bgMusic.volume = val / 100;
+  });
+
+  // Initialize volume on load
+  bgMusic.volume = volumeInput.value / 100;
 </script>
 
 </body>
