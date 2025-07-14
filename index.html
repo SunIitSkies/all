@@ -4,286 +4,229 @@
   <title>Objection.lol Assets</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<style>
-  body {
-    background-image: url('objection.lol/evidence/cirno%20fumo%20in%20a%20field.png');
-    background-size: cover;
-    background-repeat: repeat;
-    background-position: center;
-    color: white;
-    margin: 0;
-    height: 100vh;
-    font-family: 'Roboto', Arial, sans-serif;
-  }
-
-  .content-block {
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 30px 40px; /* more generous padding */
-    border-radius: 10px;
-    max-width: 800px;
-    margin: 40px auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* subtle depth */
-    color: white;
-  }
-
-  ul {
-    padding-left: 20px;
-  }
-
-  button {
-    margin-left: 10px;
-    cursor: pointer;
-  }
-</style>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <style>
+    body {
+      background-image: url('objection.lol/evidence/cirno%20fumo%20in%20a%20field.png');
+      background-size: cover;
+      background-repeat: repeat;
+      background-position: center;
+      color: white;
+      margin: 0;
+      height: 100vh;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+    .content-block {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px 40px;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 40px auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+    ul { padding-left: 20px; }
+    button { margin-left: 10px; cursor: pointer; }
+    a { color: white !important; text-decoration: underline; }
+    a:visited { color: cyan !important; }
+    a:hover, a:active { color: #00ffff !important; }
+    #musicToggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 60px;
+      height: 30px;
+      cursor: pointer;
+      background-color: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    #volumeInput {
+      position: fixed;
+      top: 45px;
+      right: 10px;
+      width: 60px;
+      height: 25px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+  </style>
 </head>
-
-
-<style>
-a { color: white !important; text-decoration: underline; }
-a:visited { color: cyan !important; }
-a:hover, a:active { color: #00ffff !important; }
-</style>
-
 <body>
   <div class="content-block">
     <h1>Objection.lol Assets</h1>
     <ul id="fileList"></ul>
   </div>
-  
+  <button id="musicToggle">Music</button>
+  <input type="number" id="volumeInput" min="0" max="100" value="20" />
+  <audio id="bgMusic" loop>
+    <source src="objection.lol/sounds/Courtroom%20Lobby%20AJ;AA%20(extended).mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
 
   <script>
-fetch('filelist.json')
-  .then(response => response.json())
-  .then(files => {
-    // Group files by folder (path before last slash)
-    const groups = {};
-    files.forEach(file => {
-      const folder = file.path.substring(0, file.path.lastIndexOf('/')) || 'root';
-      if (!groups[folder]) groups[folder] = [];
-      groups[folder].push(file);
-    });
-
-    // Sort groups by folder name
-    const sortedFolders = Object.keys(groups).sort();
-
-    const ul = document.getElementById('fileList');
-
-    sortedFolders.forEach(folder => {
-      // Add header for folder
-      const header = document.createElement('h2');
-      header.textContent = folder;
-      ul.appendChild(header);
-
-      // Sort files alphabetically by name in the group
-      groups[folder].sort((a, b) => a.name.localeCompare(b.name));
-
-      groups[folder].forEach(file => {
-        const li = document.createElement('li');
-
-        const a = document.createElement('a');
-        a.href = '/' + file.path;
-        a.textContent = file.name;
-        a.target = '_blank'; // open in new tab
-        li.appendChild(a);
-
-        const btn = document.createElement('button');
-        btn.textContent = 'Copy Link';
-        btn.style.marginLeft = '10px';
-		btn.onclick = () => {
-  navigator.clipboard.writeText(window.location.origin + '/' + file.path)
-    .then(() => {
-      // Create or reuse a span for feedback
-      let feedback = btn.nextSibling;
-      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
-        feedback = document.createElement('span');
-        feedback.classList.add('copy-feedback');
-        feedback.style.marginLeft = '10px';
-        feedback.style.color = 'green';
-        btn.parentNode.insertBefore(feedback, btn.nextSibling);
-      }
-      feedback.textContent = 'Copied!';
-      // Remove the feedback text after 2 seconds
-      setTimeout(() => {
-        feedback.textContent = '';
-      }, 2000);
-    })
-    .catch(() => {
-      // Similar feedback for failure
-      let feedback = btn.nextSibling;
-      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
-        feedback = document.createElement('span');
-        feedback.classList.add('copy-feedback');
-        feedback.style.marginLeft = '10px';
-        feedback.style.color = 'red';
-        btn.parentNode.insertBefore(feedback, btn.nextSibling);
-      }
-      feedback.textContent = 'Failed to copy!';
-      setTimeout(() => {
-        feedback.textContent = '';
-      }, 2000);
-    });
-		};
-		
-        li.appendChild(btn);
-
-        ul.appendChild(li);
-      });
-    });
-  })
-  .catch(e => console.error('Failed to load filelist.json', e));
-</script>
-
-<style>
-  #musicToggle {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 30px;
-    cursor: pointer;
-    background-color: rgba(0,0,0,0.6);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  #volumeInput {
-    position: fixed;
-    top: 45px;
-    right: 10px;
-    width: 60px;
-    height: 25px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-</style>
-
-<button id="musicToggle">Music</button>
-<input type="number" id="volumeInput" min="0" max="100" value="20" />
-
-<audio id="bgMusic" loop volume="0.2">
-  <source src="objection.lol/sounds/Courtroom%20Lobby%20AJ;AA%20(extended).mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
-
-<script>
-  const musicToggle = document.getElementById('musicToggle');
-  const bgMusic = document.getElementById('bgMusic');
-  const volumeInput = document.getElementById('volumeInput');
-  let playing = false;
-
-  musicToggle.addEventListener('click', () => {
-    if (playing) {
-      bgMusic.pause();
-      musicToggle.style.backgroundColor = 'rgba(0,0,0,0.6)';
-    } else {
-      bgMusic.play();
-      musicToggle.style.backgroundColor = 'rgba(0,128,0,0.8)';
+    // --- Filelist loader & save for "data freshness" checks ---
+    function loadFileList(display) {
+      const ver = localStorage.getItem('siteVersion') || Date.now();
+      fetch('filelist.json?v=' + ver)
+        .then(response => response.json())
+        .then(files => {
+          // Always update stored filelist for update banner check
+          localStorage.setItem('lastFileList', JSON.stringify(files));
+          if (display) {
+            // Group and show as before
+            const groups = {};
+            files.forEach(file => {
+              const folder = file.path.substring(0, file.path.lastIndexOf('/')) || 'root';
+              if (!groups[folder]) groups[folder] = [];
+              groups[folder].push(file);
+            });
+            const sortedFolders = Object.keys(groups).sort();
+            const ul = document.getElementById('fileList');
+            ul.innerHTML = ''; // Clear before repopulating
+            sortedFolders.forEach(folder => {
+              const header = document.createElement('h2');
+              header.textContent = folder;
+              ul.appendChild(header);
+              groups[folder].sort((a, b) => a.name.localeCompare(b.name));
+              groups[folder].forEach(file => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = '/' + file.path;
+                a.textContent = file.name;
+                a.target = '_blank';
+                li.appendChild(a);
+                const btn = document.createElement('button');
+                btn.textContent = 'Copy Link';
+                btn.style.marginLeft = '10px';
+                btn.onclick = () => {
+                  navigator.clipboard.writeText(window.location.origin + '/' + file.path)
+                    .then(() => {
+                      let feedback = btn.nextSibling;
+                      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
+                        feedback = document.createElement('span');
+                        feedback.classList.add('copy-feedback');
+                        feedback.style.marginLeft = '10px';
+                        feedback.style.color = 'green';
+                        btn.parentNode.insertBefore(feedback, btn.nextSibling);
+                      }
+                      feedback.textContent = 'Copied!';
+                      setTimeout(() => { feedback.textContent = ''; }, 2000);
+                    })
+                    .catch(() => {
+                      let feedback = btn.nextSibling;
+                      if (!feedback || !feedback.classList || !feedback.classList.contains('copy-feedback')) {
+                        feedback = document.createElement('span');
+                        feedback.classList.add('copy-feedback');
+                        feedback.style.marginLeft = '10px';
+                        feedback.style.color = 'red';
+                        btn.parentNode.insertBefore(feedback, btn.nextSibling);
+                      }
+                      feedback.textContent = 'Failed to copy!';
+                      setTimeout(() => { feedback.textContent = ''; }, 2000);
+                    });
+                };
+                li.appendChild(btn);
+                ul.appendChild(li);
+              });
+            });
+          }
+        })
+        .catch(e => console.error('Failed to load filelist.json', e));
     }
-    playing = !playing;
-  });
+    // Initial load (display)
+    loadFileList(true);
+  </script>
 
-  volumeInput.addEventListener('input', () => {
-    let val = parseInt(volumeInput.value, 10);
-    if (isNaN(val)) val = 20;
-    if (val < 0) val = 0;
-    if (val > 100) val = 100;
-    bgMusic.volume = val / 100;
-  });
+  <script>
+    // --- Music toggle ---
+    const musicToggle = document.getElementById('musicToggle');
+    const bgMusic = document.getElementById('bgMusic');
+    const volumeInput = document.getElementById('volumeInput');
+    let playing = false;
 
-  // Initialize volume on load
-  bgMusic.volume = volumeInput.value / 100;
-</script>
-
-<script>
-const VERSION_URL = '/version.txt';
-
-function getStoredVersion() {
-  return localStorage.getItem('siteVersion');
-}
-function setStoredVersion(ver) {
-  localStorage.setItem('siteVersion', ver);
-}
-
-function showUpdateBanner() {
-  if (!document.getElementById('updateBanner')) {
-    const banner = document.createElement('div');
-    banner.id = 'updateBanner';
-    banner.style.cssText = `
-      position:fixed;top:0;left:0;width:100%;
-      background:#1db954;color:#fff;
-      text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
-    banner.textContent = "The website has been updated, please refresh.";
-    const btn = document.createElement('button');
-    btn.textContent = 'Hard Refresh';
-    btn.style.cssText = 'margin-left:2em;padding:0.5em 1em;';
-    btn.onclick = function() {
-      window.location.href = window.location.pathname + '?refresh=' + Date.now();
-    };
-    banner.appendChild(btn);
-    document.body.appendChild(banner);
-  }
-}
-function hideUpdateBanner() {
-  const b = document.getElementById('updateBanner');
-  if (b) b.remove();
-}
-
-function checkVersion() {
-  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
-    .then(res => res.text())
-    .then(ver => {
-      ver = ver.trim();
-      const stored = getStoredVersion();
-      if (!stored) {
-        setStoredVersion(ver);
-        hideUpdateBanner();
-        return;
-      }
-      if (ver !== stored) {
-        showUpdateBanner();
+    musicToggle.addEventListener('click', () => {
+      if (playing) {
+        bgMusic.pause();
+        musicToggle.style.backgroundColor = 'rgba(0,0,0,0.6)';
       } else {
-        hideUpdateBanner();
+        bgMusic.play();
+        musicToggle.style.backgroundColor = 'rgba(0,128,0,0.8)';
       }
+      playing = !playing;
     });
-}
 
-window.addEventListener('DOMContentLoaded', function() {
-  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
-    .then(res => res.text())
-    .then(ver => {
-      ver = ver.trim();
-      const stored = getStoredVersion();
-      if (!stored) {
-        setStoredVersion(ver);
-        hideUpdateBanner();
-        return;
+    volumeInput.addEventListener('input', () => {
+      let val = parseInt(volumeInput.value, 10);
+      if (isNaN(val)) val = 20;
+      if (val < 0) val = 0;
+      if (val > 100) val = 100;
+      bgMusic.volume = val / 100;
+    });
+    bgMusic.volume = volumeInput.value / 100;
+  </script>
+
+  <script>
+    // --- Data-driven update bar ---
+    const VERSION_URL = '/version.txt';
+    const FILELIST_URL = 'filelist.json?v=';
+
+    function sameFileList(a, b) {
+      return JSON.stringify(a) === JSON.stringify(b);
+    }
+
+    function showUpdateBanner() {
+      if (!document.getElementById('updateBanner')) {
+        const banner = document.createElement('div');
+        banner.id = 'updateBanner';
+        banner.style.cssText = `
+          position:fixed;top:0;left:0;width:100%;
+          background:#1db954;color:#fff;
+          text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
+        banner.textContent = "The website has been updated, please hard refresh (Shift+F5).";
+        document.body.appendChild(banner);
       }
-      if (ver !== stored) {
-        showUpdateBanner();
-      } else {
-        hideUpdateBanner();
-      }
+    }
+    function hideUpdateBanner() {
+      const b = document.getElementById('updateBanner');
+      if (b) b.remove();
+    }
+
+    function checkFullUpdate() {
+      fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
+        .then(res => res.text())
+        .then(ver => {
+          ver = ver.trim();
+          const lastSeenVersion = localStorage.getItem('siteVersion');
+          if (!lastSeenVersion || ver !== lastSeenVersion) {
+            // New version detected, fetch new filelist.json
+            fetch(FILELIST_URL + ver, { cache: 'no-store' })
+              .then(r => r.json())
+              .then(newList => {
+                const oldList = JSON.parse(localStorage.getItem('lastFileList') || '[]');
+                if (!sameFileList(newList, oldList)) {
+                  showUpdateBanner();
+                } else {
+                  localStorage.setItem('siteVersion', ver);
+                  hideUpdateBanner();
+                  // Optionally re-load displayed file list
+                  loadFileList(true);
+                }
+              });
+          } else {
+            hideUpdateBanner();
+          }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      checkFullUpdate();
     });
-});
-
-// --- On refresh/hard refresh, update the local version to match remote (if banner is gone)
-window.addEventListener('load', function() {
-  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
-    .then(res => res.text())
-    .then(ver => {
-      ver = ver.trim();
-      setStoredVersion(ver);
-    });
-});
-
-setInterval(checkVersion, 10000);
-
-</script>
-
-
+    setInterval(checkFullUpdate, 10000);
+  </script>
 </body>
 </html>
