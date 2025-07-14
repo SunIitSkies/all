@@ -179,18 +179,27 @@
       return JSON.stringify(a) === JSON.stringify(b);
     }
 
-    function showUpdateBanner() {
-      if (!document.getElementById('updateBanner')) {
-        const banner = document.createElement('div');
-        banner.id = 'updateBanner';
-        banner.style.cssText = `
-          position:fixed;top:0;left:0;width:100%;
-          background:#1db954;color:#fff;
-          text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
-        banner.textContent = "The website has been updated, please hard refresh (Shift+F5).";
-        document.body.appendChild(banner);
-      }
-    }
+	function showUpdateBanner() {
+	  if (!document.getElementById('updateBanner')) {
+		const banner = document.createElement('div');
+		banner.id = 'updateBanner';
+		banner.style.cssText = `
+		  position:fixed;top:0;left:0;width:100%;
+		  background:#1db954;color:#fff;
+		  text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
+		banner.textContent = "The website has been updated, please hard refresh (Shift+F5) or ";
+		// Hard refresh button:
+		const btn = document.createElement('button');
+		btn.textContent = 'Hard Refresh';
+		btn.style.cssText = 'margin-left:1em;padding:0.5em 1em;';
+		btn.onclick = function() {
+		  window.location.href = window.location.pathname + '?refresh=' + Date.now();
+		};
+		banner.appendChild(btn);
+		document.body.appendChild(banner);
+	  }
+	}
+
     function hideUpdateBanner() {
       const b = document.getElementById('updateBanner');
       if (b) b.remove();
