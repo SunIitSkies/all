@@ -199,29 +199,16 @@ fetch('filelist.json')
 </script>
 
 <script>
-// Optionally clear localStorage on first ever use of site (good for dev/tests)
-if (!localStorage.getItem('siteVersion')) {
-  localStorage.setItem('siteVersion', '');
-  console.log('[INIT] siteVersion set to empty');
-  clearPendingUpdate();
-}
 const VERSION_URL = '/version.txt';
 
-// --- Helper: Get and Set pending update flag ---
-function setPendingUpdate(ver) {
-  localStorage.setItem('pendingUpdate', ver);
-  console.log('[CALL] setPendingUpdate with:', ver);
+function getStoredVersion() {
+  return localStorage.getItem('siteVersion');
 }
-function getPendingUpdate() {
-  return localStorage.getItem('pendingUpdate');
-}
-function clearPendingUpdate() {
-  localStorage.removeItem('pendingUpdate');
-  console.log('[CALL] clearPendingUpdate');
+function setStoredVersion(ver) {
+  localStorage.setItem('siteVersion', ver);
 }
 
 function showUpdateBanner() {
-  console.log('[CALL] showUpdateBanner was called!');
   if (!document.getElementById('updateBanner')) {
     const banner = document.createElement('div');
     banner.id = 'updateBanner';
@@ -230,12 +217,10 @@ function showUpdateBanner() {
       background:#1db954;color:#fff;
       text-align:center;padding:1em;font-size:1.2em;z-index:9999;`;
     banner.textContent = "The website has been updated, please refresh.";
-    // Add hard refresh button
     const btn = document.createElement('button');
     btn.textContent = 'Hard Refresh';
     btn.style.cssText = 'margin-left:2em;padding:0.5em 1em;';
     btn.onclick = function() {
-      // Bust cache
       window.location.href = window.location.pathname + '?refresh=' + Date.now();
     };
     banner.appendChild(btn);
@@ -247,69 +232,56 @@ function hideUpdateBanner() {
   if (b) b.remove();
 }
 
-// --- Main check logic ---
 function checkVersion() {
-  const bust = Date.now();
-  fetch(VERSION_URL + '?v=' + bust, { cache: 'no-store' })
+  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
-      console.log(
-        'Running checkVersion...',
-        '| Stored:', localStorage.getItem('siteVersion'),
-        '| Remote:', ver,
-        '| Pending:', getPendingUpdate()
-      );
-      // --- rest of your code below ---
-      const storedVersion = localStorage.getItem('siteVersion');
-      if (!storedVersion) {
-        localStorage.setItem('siteVersion', ver);
-        console.log('[SET] siteVersion updated to:', ver, '(First set)');
-        clearPendingUpdate();
+      const stored = getStoredVersion();
+      if (!stored) {
+        setStoredVersion(ver);
         hideUpdateBanner();
         return;
       }
-      if (ver !== storedVersion) {
-        setPendingUpdate(ver);
+      if (ver !== stored) {
         showUpdateBanner();
-      }
-      const pending = getPendingUpdate();
-      if (pending && pending === ver) {
-        clearPendingUpdate();
-        localStorage.setItem('siteVersion', ver);
-        console.log('[SET] siteVersion updated to:', ver, '(On match)');
+      } else {
         hideUpdateBanner();
       }
     });
 }
 
-// On page load, if a pending update was already set, keep showing banner
 window.addEventListener('DOMContentLoaded', function() {
-  const bust = Date.now();
-  fetch(VERSION_URL + '?v=' + bust, { cache: 'no-store' })
+  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
     .then(res => res.text())
     .then(ver => {
       ver = ver.trim();
-      console.log(
-        '[DOMContentLoaded] Initial | Remote:', ver,
-        '| Stored:', localStorage.getItem('siteVersion'),
-        '| Pending:', getPendingUpdate()
-      );
-      // ...rest of your logic...
-      const storedVersion = localStorage.getItem('siteVersion');
-      if (!storedVersion) {
-        localStorage.setItem('siteVersion', ver);
-        console.log('[SET] siteVersion updated to:', ver, '(DOMContentLoaded)');
-        clearPendingUpdate();
+      const stored = getStoredVersion();
+      if (!stored) {
+        setStoredVersion(ver);
+        hideUpdateBanner();
+        return;
+      }
+      if (ver !== stored) {
+        showUpdateBanner();
+      } else {
         hideUpdateBanner();
       }
-      const pending = getPendingUpdate();
-      if (pending && pending !== ver) showUpdateBanner();
     });
 });
 
-// --- RUN PERIODIC CHECK ---
+// --- On refresh/hard refresh, update the local version to match remote (if banner is gone)
+window.addEventListener('load', function() {
+  fetch(VERSION_URL + '?v=' + Date.now(), { cache: 'no-store' })
+    .then(res => res.text())
+    .then(ver => {
+      ver = ver.trim();
+      setStoredVersion(ver);
+    });
+});
+
 setInterval(checkVersion, 10000);
+
 </script>
 
 
